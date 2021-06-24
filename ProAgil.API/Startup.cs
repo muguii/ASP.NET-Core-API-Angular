@@ -1,18 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using ProAgil.API.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ProAgil.Repository;
 
 namespace ProAgil.API
 {
@@ -30,6 +23,7 @@ namespace ProAgil.API
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ProAgilDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddScoped<IProAgilRepository, ProAgilRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -55,6 +49,7 @@ namespace ProAgil.API
 
             app.UseAuthorization();
             app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

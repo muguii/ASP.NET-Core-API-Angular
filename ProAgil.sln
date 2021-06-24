@@ -26,6 +26,13 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ProAgil-APP", "ProAgil-APP\
 		SlnRelativePath = "ProAgil-APP\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProAgil.Domain", "ProAgil.Domain\ProAgil.Domain.csproj", "{094C1926-6AD3-4A4F-8A69-C011FDC2F383}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProAgil.Repository", "ProAgil.Repository\ProAgil.Repository.csproj", "{BDEAE0DC-A900-4653-BB3F-D8D03B41820C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{094C1926-6AD3-4A4F-8A69-C011FDC2F383} = {094C1926-6AD3-4A4F-8A69-C011FDC2F383}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +47,14 @@ Global
 		{FC942156-F13F-4700-8571-05248640CE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC942156-F13F-4700-8571-05248640CE1A}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC942156-F13F-4700-8571-05248640CE1A}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{094C1926-6AD3-4A4F-8A69-C011FDC2F383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{094C1926-6AD3-4A4F-8A69-C011FDC2F383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{094C1926-6AD3-4A4F-8A69-C011FDC2F383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{094C1926-6AD3-4A4F-8A69-C011FDC2F383}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDEAE0DC-A900-4653-BB3F-D8D03B41820C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDEAE0DC-A900-4653-BB3F-D8D03B41820C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDEAE0DC-A900-4653-BB3F-D8D03B41820C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDEAE0DC-A900-4653-BB3F-D8D03B41820C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
