@@ -85,12 +85,12 @@ namespace ProAgil.API.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(Evento inputModel)
+        [HttpPut("{eventoId}")]
+        public async Task<IActionResult> Put(int eventoId, Evento inputModel)
         {
             try
             {
-                Evento evento = await Repository.GetEventoAsyncById(inputModel.Id, false);
+                Evento evento = await Repository.GetEventoAsyncById(eventoId, false);
 
                 if (evento == null)
                 {
@@ -101,7 +101,7 @@ namespace ProAgil.API.Controllers
 
                 if (await Repository.SaveChangeAsync())
                 {
-                    return Created($"/api/evento/{inputModel.Id}", inputModel);
+                    return Created($"/api/evento/{eventoId}", inputModel);
                 }
                 else
                 {
