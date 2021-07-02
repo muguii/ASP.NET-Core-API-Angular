@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProAgil.API.DTOs;
 using ProAgil.Domain;
 using ProAgil.Repository;
 using System;
@@ -10,15 +12,17 @@ using System.Threading.Tasks;
 
 namespace ProAgil.API.Controllers
 {
-    [ApiController]
+    [ApiController] // Adicionando isso entendesse que o parametro esta sendo passado via corpo do POST sem a necessidad de adicionar o [FromBody] no parametro do método -- ESTUDAR MELHOR ESSE DECORATOR
     [Route("api/[controller]")]
     public class EventoController : ControllerBase
     {
         private readonly IProAgilRepository Repository;
+        private readonly IMapper Mapper;
 
-        public EventoController(IProAgilRepository repository)
+        public EventoController(IProAgilRepository repository, IMapper mapper)
         {
             Repository = repository;
+            Mapper = mapper;
         }
 
         [HttpGet]
@@ -27,7 +31,9 @@ namespace ProAgil.API.Controllers
             try
             {
                 List<Evento> eventos = await Repository.GetAllEventosAsync(true);
-                return Ok(eventos);
+                List<EventoDTO> eventosViewModel = Mapper.Map<List<EventoDTO>>(eventos);
+
+                return Ok(eventosViewModel);
             }
             catch (Exception)
             {
@@ -41,7 +47,9 @@ namespace ProAgil.API.Controllers
             try
             {
                 Evento evento = await Repository.GetEventoAsyncById(eventoId, true);
-                return Ok(evento);
+                EventoDTO eventoViewModel = Mapper.Map<EventoDTO>(evento);
+
+                return Ok(eventoViewModel);
             }
             catch (Exception)
             {
@@ -55,7 +63,9 @@ namespace ProAgil.API.Controllers
             try
             {
                 List<Evento> eventos = await Repository.GetAllEventosAsyncByTema(tema, true);
-                return Ok(eventos);
+                List<EventoDTO> eventosViewModel = Mapper.Map<List<EventoDTO>>(eventos);
+
+                return Ok(eventosViewModel);
             }
             catch (Exception)
             {
@@ -64,29 +74,30 @@ namespace ProAgil.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Evento inputModel)
+        public async Task<IActionResult> Post(EventoDTO inputModel) //TODO: Criar ViewModel e InputModel
         {
             try
             {
-                Repository.Add(inputModel);
+                Evento eventoInputModel = Mapper.Map<Evento>(inputModel);
+                Repository.Add(eventoInputModel);
 
                 if (await Repository.SaveChangeAsync())
                 {
-                    return Created($"/api/evento/{inputModel.Id}", inputModel);
+                    return Created($"/api/evento/{inputModel.Id}", eventoInputModel); //Tem necessidade de fazer um Map aqui? Unica divergencia é devido ao inputModel não ter o ID.
                 }
                 else
                 {
                     return BadRequest();
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro!");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro! {exception.Message}");
             }
         }
 
         [HttpPut("{eventoId}")]
-        public async Task<IActionResult> Put(int eventoId, Evento inputModel)
+        public async Task<IActionResult> Put(int eventoId, EventoDTO inputModel)
         {
             try
             {
@@ -97,7 +108,8 @@ namespace ProAgil.API.Controllers
                     return NotFound();
                 }
 
-                Repository.Update(inputModel);
+                Mapper.Map(inputModel, evento);
+                Repository.Update(evento);
 
                 if (await Repository.SaveChangeAsync())
                 {
@@ -108,9 +120,9 @@ namespace ProAgil.API.Controllers
                     return BadRequest();
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro!");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro! {exception.Message}");
             }
         }
 

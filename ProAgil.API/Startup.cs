@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using AutoMapper;
 using ProAgil.Repository;
 
 namespace ProAgil.API
@@ -25,6 +26,7 @@ namespace ProAgil.API
             services.AddDbContext<ProAgilDbContext>(options => options.UseSqlServer(connectionString));
             services.AddScoped<IProAgilRepository, ProAgilRepository>();
 
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -46,7 +48,7 @@ namespace ProAgil.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
             app.UseAuthorization();
             app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseStaticFiles();
