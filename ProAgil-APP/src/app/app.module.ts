@@ -9,10 +9,15 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
-import { EventosComponent } from './eventos/eventos.component';
 import { NavComponent } from './nav/nav.component';
+import { EventosComponent } from './eventos/eventos.component';
+import { PalestrantesComponent } from './palestrantes/palestrantes.component';
+import { ContatosComponent } from './contatos/contatos.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { TituloComponent } from './shared/titulo/titulo.component';
 
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
 
@@ -21,8 +26,12 @@ import { EventoService } from './services/evento.service';
 @NgModule({
   declarations: [
     AppComponent,
-    EventosComponent,
     NavComponent,
+    EventosComponent,
+    PalestrantesComponent,
+    ContatosComponent,
+    DashboardComponent,
+    TituloComponent,
     DateTimeFormatPipe
   ],
   imports: [
@@ -35,7 +44,12 @@ import { EventoService } from './services/evento.service';
     ModalModule.forRoot(),
     BsDatepickerModule.forRoot(),
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true
+    })
   ],
   providers: [
     EventoService

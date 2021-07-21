@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ProAgil.API.Controllers
 {
-    [ApiController] // Adicionando isso entendesse que o parametro esta sendo passado via corpo do POST sem a necessidad de adicionar o [FromBody] no parametro do método -- ESTUDAR MELHOR ESSE DECORATOR
+    [ApiController] // Adicionando isso entendesse que o parâmetro está sendo passado via corpo do POST, assim não há necessidade de adicionar o [FromBody] no parâmetro do método -- ESTUDAR MELHOR ESSE DECORATOR
     [Route("api/[controller]")]
     public class EventoController : ControllerBase
     {
@@ -35,9 +35,9 @@ namespace ProAgil.API.Controllers
 
                 return Ok(eventosViewModel);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro!");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro! {exception.Message}");
             }
         }
 
@@ -51,9 +51,9 @@ namespace ProAgil.API.Controllers
 
                 return Ok(eventoViewModel);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro!");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro! {exception.Message}");
             }
         }
 
@@ -67,9 +67,9 @@ namespace ProAgil.API.Controllers
 
                 return Ok(eventosViewModel);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro!");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro! {exception.Message}");
             }
         }
 
@@ -113,7 +113,7 @@ namespace ProAgil.API.Controllers
 
                 if (await Repository.SaveChangeAsync())
                 {
-                    return Created($"/api/evento/{eventoId}", inputModel);
+                    return Created($"/api/evento/{eventoId}", inputModel); //Tem necessidade de fazer um Map aqui?
                 }
                 else
                 {
@@ -149,9 +149,9 @@ namespace ProAgil.API.Controllers
                     return BadRequest();
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro!");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro! {exception.Message}");
             }
         }
     }
