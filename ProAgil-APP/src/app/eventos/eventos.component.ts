@@ -32,6 +32,8 @@ export class EventosComponent implements OnInit {
 
   bodyDeletarEvento: string;
 
+  file: File[];
+
   constructor(private eventoService: EventoService, private modalService: BsModalService, private formBuilder: FormBuilder, private localeService: BsLocaleService, private toastr: ToastrService) {
     this.titulo = 'Eventos';
     this._filtroLista = '';
@@ -48,6 +50,8 @@ export class EventosComponent implements OnInit {
     this.eventoId = -1;
 
     this.bodyDeletarEvento = '';
+
+    this.file = [];
   }
 
   ngOnInit(): void {
@@ -74,7 +78,11 @@ export class EventosComponent implements OnInit {
     this.bFlInsert = 0;
     this.openModal(template);
     this.eventoId = evento.id;
-    this.registerForm.patchValue(evento); //ESTUDAR MELHOR ESSE patchValue
+
+    const eventoCopy = Object.assign({}, evento);
+    eventoCopy.imagemURL = '';
+
+    this.registerForm.patchValue(eventoCopy); //ESTUDAR MELHOR ESSE patchValue
   }
 
   novoEvento(confirmDelete: any) {
@@ -105,6 +113,11 @@ export class EventosComponent implements OnInit {
     if (this.registerForm.valid) {
       if (this.bFlInsert === 1) {
         const evento = Object.assign({}, this.registerForm.value);
+
+        const nomeArquivo = evento.imagemURL.split('\\', 3);
+        evento.imagemURL = nomeArquivo[2];
+        this.eventoService.postUpload(this.file, evento.imagemURL).subscribe();
+
         this.eventoService.postEvento(evento).subscribe( //ESTUDAR MELHOR ESSE subscribe
           (novoEvento: Evento) => {
             console.log(novoEvento);
@@ -119,6 +132,11 @@ export class EventosComponent implements OnInit {
       }
       else {
         const evento = Object.assign({ id: this.eventoId }, this.registerForm.value);
+
+        const nomeArquivo = evento.imagemURL.split('\\', 3);
+        evento.imagemURL = nomeArquivo[2];
+        this.eventoService.postUpload(this.file, evento.imagemURL).subscribe();
+
         this.eventoService.putEvento(evento).subscribe( //ESTUDAR MELHOR ESSE subscribe
           (eventoAlterado: Evento) => {
             console.log(eventoAlterado);
@@ -131,6 +149,13 @@ export class EventosComponent implements OnInit {
           }
         );
       }
+    }
+  }
+
+  onFileChange(event: any) {
+if (event.target.files && event.target.files.length) {
+      this.file = event.target.files;
+      console.log(this.file);
     }
   }
 

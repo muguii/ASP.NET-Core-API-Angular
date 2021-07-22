@@ -7,7 +7,9 @@ using ProAgil.Domain;
 using ProAgil.Repository;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace ProAgil.API.Controllers
@@ -23,6 +25,34 @@ namespace ProAgil.API.Controllers
         {
             Repository = repository;
             Mapper = mapper;
+        }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload()
+        {
+            try
+            {
+                IFormFile file = Request.Form.Files[0];
+                string folderName = Path.Combine("Resources", "Images");
+                string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                if (file.Length > 0)
+                {
+                    string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName; //Estudar melhor ContentDispositionHeaderValue e file.ContentDisposition
+                    string fullPath = Path.Combine(pathToSave, fileName.Replace("\"", string.Empty).Trim());
+
+                    using (FileStream stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro! {exception.Message}");
+            }
         }
 
         [HttpGet]

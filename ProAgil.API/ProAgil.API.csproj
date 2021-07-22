@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Resources\Images\img1.jpg" />
+    <Content Include="Resources\Images\img2.jpg" />
+    <Content Include="Resources\Images\img3.jpg" />
+    <Content Include="Resources\Images\img4.jpg" />
+    <Content Include="Resources\Images\img5.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7">
@@ -17,6 +25,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ProAgil.Domain\ProAgil.Domain.csproj" />
     <ProjectReference Include="..\ProAgil.Repository\ProAgil.Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
 </Project>

@@ -7,6 +7,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
 using ProAgil.Repository;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace ProAgil.API
 {
@@ -51,7 +54,7 @@ namespace ProAgil.API
             
             app.UseAuthorization();
             app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions() { FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")), RequestPath = new PathString("/Resources")});
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
