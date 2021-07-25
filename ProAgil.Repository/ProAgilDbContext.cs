@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ProAgil.Domain;
+using ProAgil.Domain.Identity;
 
 namespace ProAgil.Repository
 {
-    public class ProAgilDbContext : DbContext
+    public class ProAgilDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public DbSet<Evento> EVENTO { get; set; }
         public DbSet<Palestrante> PALESTRANTE { get; set; }
@@ -18,6 +21,15 @@ namespace ProAgil.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserRole>(userRole =>
+            {
+                userRole.HasKey(property => new { property.UserId, property.RoleId });
+                userRole.HasOne(property => property.Role).WithMany(property => property.UserRoles).HasForeignKey(property => property.RoleId).IsRequired();
+                userRole.HasOne(property => property.User).WithMany(property => property.UserRoles).HasForeignKey(property => property.UserId).IsRequired();
+            });
+
             modelBuilder.Entity<Evento>(evento =>
             {
                 evento.HasKey(property => property.Id);
